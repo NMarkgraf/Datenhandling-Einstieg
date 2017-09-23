@@ -3,22 +3,10 @@ title: "Methoden quantitativer Forschung"
 subtitle: "Datenhandling und Einstieg in die Analyse mit R"
 author: "Dipl.-Math. Norman Markgraf"
 date: 'Regionale FOM Dozententagen in Frankfurt 2017'
-lang: de-De
+lang: de-de
 fontsize: 10pt
 documentclass: article
 classoption: onside
-output:
-  pdf_document:
-    fig_height: 3
-    fig_width: 5
-    keep_tex: true
-    includes:
-          in_header: header.tex
-          before_body: before.tex
-    pandoc_args: [
-      "-V papersize=a4",
-      "-V lang=de"
-    ]
 ---
 
 # Einleitung 
@@ -96,7 +84,7 @@ Daten können auf unterschiedliche Art und Weise generiert werden:
 
 __Eigene Daten erzeugen__
 
-```{r}
+```{r Daten_erzeugen}
 
 # Zwei Vektor erzeuchen
 Bewertung<-c(8,10,5,6,2) # nummeriche Daten
@@ -126,7 +114,7 @@ data$Bewertung
 
 ## Nützliche Funktionen in R
 
-```{r}
+```{r Datenjudo_erste_schritte}
 length(data) # Anzahl der Elemente oder Komponenten
 str(data) # Struktur der Daten
 class(data) # Klasse oder Typ der Daten
@@ -142,7 +130,7 @@ data<-data.frame(Bewertung,Geschlecht) # und erzeugt sie wieder
 
 ```
 
-```{r, eval=FALSE, include=TRUE}
+```{r Daten_aendern, eval=FALSE, include=TRUE}
 newdata <- edit(data)   # Editiert ein Objekt und speicht unter neuem Namen
 fix(data)               # edit in place
 
@@ -161,7 +149,7 @@ Es ist praktisch, wenn die eingelesenen Daten im gleichen Verzeichnis liegen wie
 
 Wir verwenden für die Übungen den `tips` Datensatz. Dazu laden wir die Daten auf unseren Rechner und importieren die Daten. 
 
-```{r}
+```{r Daten_download}
 # Download der Daten mit dem Befehl
 download.file("https://goo.gl/whKjnl", destfile = "tips.csv")
 tips<-read.csv2("tips.csv")
@@ -171,13 +159,13 @@ tips<-read.csv2("tips.csv")
 Wenn die Daten nicht im gleichen Pfad wie das Arbeitsverzeichnis liegen, dann muss das Arbeitsverzeichnis gesucht werden.
 Workspace suchen mit getwd().
 
-```{r, eval=FALSE, include=TRUE}
+```{r Bsp-getwd, eval=FALSE, include=TRUE}
 getwd()
 ```
 
 Wenn die Daten aus einem anderen Pfad als dem Worspace geladen werden sollen, muss der Pfad angegeben werden:
 
-```{r, eval=FALSE, include=TRUE}
+```{r Bsp-setwd, eval=FALSE, include=TRUE}
 setwd("C:/.../...")
 ```
 
@@ -188,7 +176,7 @@ setwd("C:/.../...")
 Es empfiehlt sich, vor jeder Analyse den Datensatz zu betrachten. Von besonderer Relevanz ist hier die Datenstruktur, d.h. Variablennamen und Variablentypen, die Größe des Datensatzes sowie die ersten und letzten paar Zeilen.
 
 
-```{r}
+```{r Datenstruktur_pruefen}
 # Datenstruktur betrachten
 str(tips)
 
@@ -208,7 +196,7 @@ levels(tips$sex)
 
 Normalerweise liegen neu erfasste Daten nicht so vor, wie wir sie für die Datenanalyse benötigen. Wir müssen eventuell Daten konvertieren und löschen. Beispielweise wird Geschlecht über ein Online-Befragungstool meist nur mummerisch erfasst und die ZUweisung muss dann im Rahmen der Datenbereinigung und -aufbereitung erfolgen. Wie wir Variablen recodieren, haben wir bereits weiter oben gelernt. 
 
-```{r}
+```{r Datenjudo_einfach}
 # Das Geschlecht im Datensatz tips liegt bereits kategorial vor
 tips$sex
 
@@ -264,65 +252,42 @@ kann in der Regel gelesen werden **y wird modelliert von (oder hängt ab von) x 
 
 Laden der `mosaic` Paktes
 
-```{r}
+```{r Paket_mosaic_laden}
 library(mosaic)
 ```
 
 # Grafische Verfahren
 
-## Balkendiagramme und Boxplots
-
-```{r}
-#Balkendiagramm bei kategorialen Daten
-bargraph(~sex, data=tips)
-
-#Histogramm bei metirschen Daten
-histogram(~tip, data=tips)
-
-#mit Geschlechtertrennung
-histogram(~tip | sex, data=tips)
-
-#Boxplot mit metrischen Daten
-bwplot(~tip, data=tips)
-
-#Boxplot mit metrischen Daten für Gruppem
-bwplot(~tip |sex, data=tips)
-#oder
-bwplot(tip~sex , data=tips)
-
-bwplot(tip~sex |smoker, data=tips)
-
-#Scatterplot (Streudiagramm) mit zwei metrischen Variablen
-xyplot(tip~total_bill, data=tips)
-
-#Plot der Regressiongeraden
-plotModel(lm(tip~total_bill, data=tips))
-
+```{r child="lattice/diagramme.Rmd"}
 ```
+
+```{r child="ggformula/diagramme.Rmd"}
+```
+
 
 ## Tabellen
 
-```{r}
-#mosaicplot mit zwei kategorialen Variablen
-#Vorher muss eine Tabelle mit dem Befehl tally generiert werden
+```{r mosaicplot-tabellen}
+# mosaicplot mit zwei kategorialen Variablen
+# Vorher muss eine Tabelle mit dem Befehl tally generiert werden
 tally(sex~smoker, data=tips)
 
-#Tablele wir einem Objet zugewiesen
+# Tablele wir einem Objet zugewiesen
 Tabelle1 <- tally(sex~smoker, data=tips)
 
-#Mit Tabelle1 kann nun ein mosaci plot generiert werden
+# Mit Tabelle1 kann nun ein mosaci plot generiert werden
 mosaicplot(Tabelle1)
 
-#...oder alles zusammen (Das gilt übrigend grundsätzlich: Es kann über 
+# ...oder alles zusammen (Das gilt übrigend grundsätzlich: Es kann über 
 #die Objektebene gegangen werden oder der Befehle direkt ausgeführt werden
 mosaicplot(tally(sex~smoker, data=tips))
-```
 
+```
 
 
 # Kennzahlen
 
-```{r}
+```{r Kennzahlen}
 
 # Mittelwert
 mean(tip~sex, data=tips)
@@ -361,7 +326,7 @@ cor(tips[,c("total_bill", "tip", "size")])
 
 Mit Hilfe des Zusatzpakets `corrplot` lassen sich Korrelationen besonders einfach visualisieren. 
 
-```{r}
+```{r corrplot}
 #Zusatzpaket laden
 library(corrplot)
 
@@ -371,14 +336,14 @@ corrplot(cor(tips[,c("total_bill", "tip", "size")]))
 
 Je intensiver die Farbe, desto höher die Korrelation. Hier gibt es unzählige Einstellmöglichkeiten, siehe `?corrplot` bzw. für Beispiele:
 
-```{r, eval=FALSE, include=TRUE}
+```{r corrplot-vignette, eval=FALSE, include=TRUE}
 vignette("corrplot-intro")
 
 ```
 
 Noch einfacher, aber nicht so schön geht es mit dem Paket `corrgram`. Hier müssen nicht extra die metrischen Variablen ausgewählt werden. Er nimmt nur alle metrischen Variablen im Datensatz mit.  
 
-```{r}
+```{r corrgramm}
 library(corrgram)
 corrgram(tips)
 ```
