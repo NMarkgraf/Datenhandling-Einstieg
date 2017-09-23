@@ -1,0 +1,399 @@
+---
+title: "Methoden quantitativer Forschung"
+subtitle: "Datenhandling und Einstieg in die Analyse mit R"
+author: "Dipl.-Math. Norman Markgraf"
+date: 'Regionale FOM Dozententagen in Frankfurt 2017'
+lang: de-De
+fontsize: 10pt
+documentclass: article
+classoption: onside
+output:
+  pdf_document:
+    fig_height: 3
+    fig_width: 5
+    keep_tex: true
+    includes:
+          in_header: header.tex
+          before_body: before.tex
+    pandoc_args: [
+      "-V papersize=a4",
+      "-V lang=de"
+    ]
+---
+
+# Einleitung 
+
+## Das Programm R
+
+__Warum R?__
+
+* R ist ein Programm für Statistik und Datenanalyse.
+* R ist für Linux, MacOS X und Windows (95 oder höher) Plattformen verfügbar.
+* R ist eine elegante und umfassende statistische und grafische Programmiersprache. 
+* R kann eine steile Lernkurve L haben `(L = Zeiteinheit/Erfolgseinheit)`. 
+* R ist kostenlos! Wenn Sie Lehrender oder Studierender sind, sind die Vorteile offensichtlich.
+* R bietet eine unvergleichliche Plattform für die Programmierung neuer statistischer Methoden in einer einfachen und unkomplizierten Weise.
+* R enthält fortgeschrittene statistische Routinen, die noch nicht in anderen Software-Paketen verfügbar sind.
+* R verfügt über state-of-the-art Grafiken Fähigkeiten.
+
+
+__Warum RStudio?__
+
+RStudio ist eine integrierte Entwicklungsumgebung (IDE), die die Verwendung von R für Anänfäger und Experten erleichtert.
+
+__Warum KEIN RCommander?__
+
+Der RCommander ist eine grafische Benutzeroberfläche, allgemein bekannt als *Rcmdr*, und kann als Paket in **R** und **RStudio** geladen werden. -- Warum sollte man aber?
+
+__Wo bekomme ich **R** und **R Studio**?__
+
+* Die Software R kann von einer der [CRAN-Spiegelservern](https://cran.r-project.org/mirrors.html) unter <https://cran.r-project.org/mirrors.html> heruntergeladen werden.
+* RStudio bekommen Sie auf der Homepage von [RStudio](https://www.rstudio.com) unter <https://www.rstudio.com>.
+
+
+__Arbeiten mit **R** und **R Studio**__
+
+* Mit RStudio benutzen Sie entweder die Console oder ein Skiptfenster zur Eingabe der Skriptbefehle. Ein neues R-Skriptfenster öffen Sie über **File-->New File-->R Script**. 
+
+* Wenn Sie ein RStudio-Skipt benutzen, dann gibt es vier Fenster: 
+    + links oben die das Skript, 
+    + links unten die Console, 
+    + rechts oben Daten, Objekte und Historie und 
+    + links unten Dateien, Abbildung, Hilfeseiten und Tipps
+
+* Einzelne Befehle aus dem Skriptfenster in R Studio können Sie annstatt mit dem **Run Button** auch mit **Strg** und **Enter** an die Console schicken.
+
+* Befehlen können auch direkt in der Console ausgeführt werden (Ausführung mi der **Enter**-Taste). 
+
+* Das Arbeiten mit Skript hat einige Vorteile und macht die Datenanalyse sehr kompfortabel. 
+
+__Funktionalitäten in R__
+
+* Zusätzliche Funktionalitäten können über Zusatzpakete hinzugeladen werden. Diese müssen ggf. zunächst installiert werden.
+* Paketen könne über den Menüpunkt **Tools** installiert werden oder durch den Befehl **install.packages("Names des Pakets")**.
+* Pakete werden geladen mit dem Befehl **library(Name des Pakets)**.
+* Achten Sie auch die **Anführungszeichen** nur beim Installieren.
+* Mit der Pfeiltaste nach oben können Sie (nur in der Console) einen vorherigen Befehl wieder aufrufen.
+* Im R-Skrip können Sie sich die Befehle und Erläuterungen individuell einrichten und diese unabhängig von der Reihenfolge immer wieder ausführen. 
+
+
+__Umgang mit Daten in R__
+
+Das Bearbeiten und Ändern von Daten funktioniert mit R deutlich anders als z.B. unter *SPSS* -- schon weil es keine graphische Oberfläche zum Bearbeiten der Daten gibt. Das ist aber **kein** Nachteil, sondern ein Vorteil. 
+
+Der typische *SPSS* Datensatz mit Variablen in den Spalten und Fällen (Versuchspersonen) in den Zeilen heißt bei **R** **Datenrahmen** (engl. **data frame**) und ist ein Objekt im Arbeitsspeicher (engl. *Workspace*). Ein Objekt kann entweder durch das Einlesen einer Datendatei oder durch Zuweisung von Daten erzeugt werden. Zum Einsatz kommt dabei der Zuweisungsbefehl `<-`. 
+
+## Datenmanagement in R
+
+__Woher die Daten nehmen?__
+
+Daten können auf unterschiedliche Art und Weise generiert werden:
+
+* Erzeugen eigenen Daten
+* Einlesen von Sekundärdaten.
+* Einlesen von Daten aus Umfragestudie mittels Befragungssoftware oder händischer Eingabe.
+
+
+__Eigene Daten erzeugen__
+
+```{r}
+
+# Zwei Vektor erzeuchen
+Bewertung<-c(8,10,5,6,2) # nummeriche Daten
+Geschlecht<-c("m","w","m",NA,"w") #kategoriale Daten
+
+# Datenrahmen erzeugen
+data<-data.frame(Bewertung,Geschlecht)
+
+# Gesamten Datenrahmen ausgeben
+data
+
+# Nur eine Spalte ausgeben
+data[,2] # Spaltennummer reicht aus
+
+# Eine bestimmte Zeile ausgeben
+data[3,]
+
+# Inhalte einer Variablen fortlaufend ausgeben
+data$Geschlecht
+
+# Variablen ändern (z. B. recodieren der 10er Skala)
+data$Bewertung <- 11-data$Bewertung # (n+1)-X recodiert eine beliebige Skala
+data[1]
+data$Bewertung
+
+```
+
+## Nützliche Funktionen in R
+
+```{r}
+length(data) # Anzahl der Elemente oder Komponenten
+str(data) # Struktur der Daten
+class(data) # Klasse oder Typ der Daten
+names(data) # Variablennamen
+
+c(1:30) # kombinieren Daten in einen Vektor
+cbind(Bewertung, Geschlecht) # kombiniere die Daten als Spalten
+rbind(Bewertung, Geschlecht) # kombiniere Daten als Zeilen
+
+ls()     # Gibt alle aktiven Objekte aus
+rm(data) # Löscht Objekte
+data<-data.frame(Bewertung,Geschlecht) # und erzeugt sie wieder
+
+```
+
+```{r, eval=FALSE, include=TRUE}
+newdata <- edit(data)   # Editiert ein Objekt und speicht unter neuem Namen
+fix(data)               # edit in place
+
+```
+
+# Arbeiten mit einem neuen Datensatz
+
+## Daten einlesen
+
+Es ist praktisch, wenn die eingelesenen Daten im gleichen Verzeichnis liegen wie das Skript. Normalerweise arbeitet man nicht nur einmal mit einem Datensatz, sondern immer wieder und lange Zeit und auf unterschiedlichen Computern. Das Skript beinhaltet dabei alle Informationen: 
+* Welcher Datensatz wird eingelesen.
+* Was wird an den Daten verändert.
+* Welche Verfahren werden mir dem eingelesenen Datensatz duchgeführt.
+* et cetera, pp. 
+
+
+Wir verwenden für die Übungen den `tips` Datensatz. Dazu laden wir die Daten auf unseren Rechner und importieren die Daten. 
+
+```{r}
+# Download der Daten mit dem Befehl
+download.file("https://goo.gl/whKjnl", destfile = "tips.csv")
+tips<-read.csv2("tips.csv")
+
+```
+
+Wenn die Daten nicht im gleichen Pfad wie das Arbeitsverzeichnis liegen, dann muss das Arbeitsverzeichnis gesucht werden.
+Workspace suchen mit getwd().
+
+```{r, eval=FALSE, include=TRUE}
+getwd()
+```
+
+Wenn die Daten aus einem anderen Pfad als dem Worspace geladen werden sollen, muss der Pfad angegeben werden:
+
+```{r, eval=FALSE, include=TRUE}
+setwd("C:/.../...")
+```
+
+
+
+## Datenstruktur prüfen
+
+Es empfiehlt sich, vor jeder Analyse den Datensatz zu betrachten. Von besonderer Relevanz ist hier die Datenstruktur, d.h. Variablennamen und Variablentypen, die Größe des Datensatzes sowie die ersten und letzten paar Zeilen.
+
+
+```{r}
+# Datenstruktur betrachten
+str(tips)
+
+# Dimensionen des Datensatzes
+dim(tips)
+
+# Kopf oder Ende (tail) der Datenmatix betrachten
+head(tips)
+tail(tips)
+
+# Ausgabe der levels bei kategorialen Variablen
+levels(tips$sex)
+
+```
+
+## Datenstruktur verändern
+
+Normalerweise liegen neu erfasste Daten nicht so vor, wie wir sie für die Datenanalyse benötigen. Wir müssen eventuell Daten konvertieren und löschen. Beispielweise wird Geschlecht über ein Online-Befragungstool meist nur mummerisch erfasst und die ZUweisung muss dann im Rahmen der Datenbereinigung und -aufbereitung erfolgen. Wie wir Variablen recodieren, haben wir bereits weiter oben gelernt. 
+
+```{r}
+# Das Geschlecht im Datensatz tips liegt bereits kategorial vor
+tips$sex
+
+# Ausgabe der levels
+levels(tips$sex)
+
+# Konvertieren von factor auf nummerisch
+tips$sex<-as.numeric(tips$sex)
+tips$sex
+levels(tips$sex) # Es gibt keine, da jetzt nummerisch!
+
+# Konvertieren von nummerisch auf factor
+tips$sex<-as.factor(tips$sex)
+levels(tips$sex)
+
+# Wertzuweisung von levels
+levels(tips$sex)<-c("f","m")
+levels(tips$sex)
+tips$sex
+
+# oder alternativ alles in einem Schritt!
+# Dabei wird die Spalte sex wieder überschrieben
+tips$sex<-factor(tips$sex, labels = c("female", "male")) 
+levels(tips$sex)
+
+```
+
+# Arbeiten mit dem Paket `mosaic`
+
+Die folgende Syntax 
+
+> Zielbefehl(y ~ x | z, data=...)
+
+wird verwendet für 
+
+* graphische Zusammenfassungen,
+* numerische Zusammenfassungen und 
+* inferentstatistische Auswertungen
+
+
+Für Grafiken gilt:
+
+* y: y-Achse Variable
+* x: x-Achse Variable
+* z: Bedingungsvariable
+    
+
+Generell gilt:
+
+> $y ~ x | z$ analog zu $y = f(x)|_z$
+
+kann in der Regel gelesen werden **y wird modelliert von (oder hängt ab von) x unterschieden für jedes z**.
+
+Laden der `mosaic` Paktes
+
+```{r}
+library(mosaic)
+```
+
+# Grafische Verfahren
+
+## Balkendiagramme und Boxplots
+
+```{r}
+#Balkendiagramm bei kategorialen Daten
+bargraph(~sex, data=tips)
+
+#Histogramm bei metirschen Daten
+histogram(~tip, data=tips)
+
+#mit Geschlechtertrennung
+histogram(~tip | sex, data=tips)
+
+#Boxplot mit metrischen Daten
+bwplot(~tip, data=tips)
+
+#Boxplot mit metrischen Daten für Gruppem
+bwplot(~tip |sex, data=tips)
+#oder
+bwplot(tip~sex , data=tips)
+
+bwplot(tip~sex |smoker, data=tips)
+
+#Scatterplot (Streudiagramm) mit zwei metrischen Variablen
+xyplot(tip~total_bill, data=tips)
+
+#Plot der Regressiongeraden
+plotModel(lm(tip~total_bill, data=tips))
+
+```
+
+## Tabellen
+
+```{r}
+#mosaicplot mit zwei kategorialen Variablen
+#Vorher muss eine Tabelle mit dem Befehl tally generiert werden
+tally(sex~smoker, data=tips)
+
+#Tablele wir einem Objet zugewiesen
+Tabelle1 <- tally(sex~smoker, data=tips)
+
+#Mit Tabelle1 kann nun ein mosaci plot generiert werden
+mosaicplot(Tabelle1)
+
+#...oder alles zusammen (Das gilt übrigend grundsätzlich: Es kann über 
+#die Objektebene gegangen werden oder der Befehle direkt ausgeführt werden
+mosaicplot(tally(sex~smoker, data=tips))
+```
+
+
+
+# Kennzahlen
+
+```{r}
+
+# Mittelwert
+mean(tip~sex, data=tips)
+
+
+#Anstatt mean können alle Lageparameter oder Streumaße erechnet werden 
+median(tip~sex, data=tips)
+sd(tip~sex, data=tips)
+var(tip~sex, data=tips)
+IQR(tip~sex, data=tips)
+diffmean(tip~sex, data=tips)
+min(tip~sex, data=tips)
+max(tip~sex, data=tips)
+
+#Favorisierte Statistiken werden ausgegeben mit
+favstats(tip~sex, data=tips)
+
+#Korrelation als Zusammenhangsmaß mit metrischen Variablen
+cor(tip~total_bill, data=tips)
+
+cor(tips[,c("total_bill", "tip", "size")])
+
+```
+
+
+***
+**Tip**
+
+> Wenn über mehrere Variablen eine Dimension (durch z. B. mean) gebildet werden soll, dann eignet sich für die Aggregation der Daten der apply Befehl.(Achtung: hier mit tips nicht möglich!)                                   
+                                                                           
+> Datensatz$Neue_Variable <- apply(Datensatz[,c("Variable1","Variable2", "etc..")],1,mean,na.rm=TRUE)  
+
+***
+
+# Korrleationsplot
+
+Mit Hilfe des Zusatzpakets `corrplot` lassen sich Korrelationen besonders einfach visualisieren. 
+
+```{r}
+#Zusatzpaket laden
+library(corrplot)
+
+corrplot(cor(tips[,c("total_bill", "tip", "size")]))
+
+```
+
+Je intensiver die Farbe, desto höher die Korrelation. Hier gibt es unzählige Einstellmöglichkeiten, siehe `?corrplot` bzw. für Beispiele:
+
+```{r, eval=FALSE, include=TRUE}
+vignette("corrplot-intro")
+
+```
+
+Noch einfacher, aber nicht so schön geht es mit dem Paket `corrgram`. Hier müssen nicht extra die metrischen Variablen ausgewählt werden. Er nimmt nur alle metrischen Variablen im Datensatz mit.  
+
+```{r}
+library(corrgram)
+corrgram(tips)
+```
+
+
+\newpage
+# Literaturempfehlung für den Einstieg in R mit dem Paket mosaic
+
+- Daniel T. Kaplan, Nicholas J. Horton, Randall Pruim,  (2013): Project MOSAIC Little Books *Start Teaching with R*,  [http://mosaic-web.org/go/Master-Starting.pdf](http://mosaic-web.org/go/Master-Starting.pdf)
+
+
+
+# Versionshinweise:
+* Autor des Orginal-Skripts: Prof. Dr. Oliver Gansser
+    - Danke für die Überlassung!
+* Datum erstellt: `r Sys.Date()`
+* R Version: `r getRversion()`
+* `mosaic` Version: `r packageVersion("mosaic")`

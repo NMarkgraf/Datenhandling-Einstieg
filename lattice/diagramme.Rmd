@@ -1,0 +1,30 @@
+
+## Balkendiagramme und Boxplots (`lattice`)
+
+```{r lattice-diagramme}
+#Balkendiagramm bei kategorialen Daten
+bargraph(~sex, data=tips)
+
+#Histogramm bei metirschen Daten
+histogram(~tip, data=tips)
+
+#mit Geschlechtertrennung
+histogram(~tip | sex, data=tips)
+
+#Boxplot mit metrischen Daten
+bwplot(~tip, data=tips)
+
+#Boxplot mit metrischen Daten für Gruppem
+bwplot(~tip |sex, data=tips)
+#oder
+bwplot(tip~sex , data=tips)
+
+bwplot(tip~sex |smoker, data=tips)
+
+#Scatterplot (Streudiagramm) mit zwei metrischen Variablen
+xyplot(tip~total_bill, data=tips)
+
+#Plot der Regressiongeraden
+plotModel(lm(tip~total_bill, data=tips))
+
+```

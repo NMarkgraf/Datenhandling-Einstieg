@@ -1,0 +1,30 @@
+
+## Balkendiagramme und Boxplots (`ggformula`)
+
+```{r ggformula-diagramme}
+#Balkendiagramm bei kategorialen Daten
+gf_bar( ~ sex, data=tips)
+
+#Histogramm bei metirschen Daten
+gf_histogram( ~ tip, data=tips)
+
+#mit Geschlechtertrennung
+gf_histogram( ~ tip | sex, data=tips)
+
+#Boxplot mit metrischen Daten
+gf_boxplot( tip ~ 1, data=tips)
+
+#Boxplot mit metrischen Daten für Gruppem
+gf_boxplot( tip ~  1 | sex, data=tips)
+#oder
+gf_boxplot(tip ~ sex , data=tips)
+
+gf_boxplot(tip ~ sex | smoker, data=tips)
+
+#Scatterplot (Streudiagramm) mit zwei metrischen Variablen
+gf_point(tip~total_bill, data=tips)
+
+#Plot der Regressiongeraden
+gf_point(tip~total_bill, data=tips) %>% gf_lm()
+
+```

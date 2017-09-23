@@ -1,0 +1,8 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+tips.csv
+*_files
+*_cache
+*.pdf
