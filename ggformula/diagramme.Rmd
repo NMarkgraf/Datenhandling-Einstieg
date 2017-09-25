@@ -12,7 +12,7 @@ gf_histogram( ~ tip, data=tips)
 gf_histogram( ~ tip | sex, data=tips)
 
 #Boxplot mit metrischen Daten
-gf_boxplot( tip ~ 1, data=tips)
+gf_boxplot( tip ~ 1, data=tips) + coord_flip()
 
 #Boxplot mit metrischen Daten für Gruppem
 gf_boxplot( tip ~  1 | sex, data=tips)

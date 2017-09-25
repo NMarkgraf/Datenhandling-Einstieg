@@ -1,0 +1,163 @@
+---
+title: "Das kleine Land 'Resista' und die Analyse in R"
+author: "Norman Markgraf"
+date: "23 September 2017"
+output: pdf_document
+lang: de-De
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(mosaic)
+library(car)
+```
+
+## Wir erzeugen uns ein Land
+
+```{r setup-resista}
+set.seed(2009)
+pop_size <- 15000 # besser aber langsam: 15000000
+pop_men_size <- 0.48 * pop_size
+pop_women_size <- pop_size-pop_men_size
+pop_men_sd <- 10
+pop_women_sd <-12
+
+sample_size <- .10 * pop_size
+
+sex_factor <- factor("male", "female") 
+resista_men <- data.frame(
+#    id = as.integer(1:pop_men_size),
+    size = rnorm(n=pop_men_size, mean=182, sd=pop_men_sd ),
+    sex = rep("male", pop_men_size)
+)
+resista_women <- data.frame(
+#    id = as.integer(pop_men_size+(1:pop_women_size)),
+    size = rnorm(n=pop_women_size, mean=170, sd=pop_women_sd ),
+    sex = rep("female", pop_women_size)
+)
+resista <- rbind(resista_men, resista_women)
+```
+
+
+Darf ich vorstellen "Resista", ein kleines Land mit $`r pop_size`$ Einwohnern.
+
+```{r }
+head(resista)
+tail(resista)
+levels(resista)
+
+inspect(resista, select=c("sex", "size"))
+
+```
+
+Als Chef-Statistiker dieses Landes, sollen Sie einen Art Microzensus durchführen. Dazu nehmen Sie eine Stichprobe von Zufällig `r sample_size` Personen und schaun sich an, wie viele Männer und Frauen vorhanden sind:
+
+```{r}
+stichprobe <- sample(resista, sample_size)
+
+gf_bar(sex ~ 1, data=stichprobe)
+
+gf_bar(sex ~ 1, data=stichprobe) + 
+    scale_y_continuous(labels = scales::percent) +
+    labs(y="percent")
+
+inspect(stichprobe, select="sex")
+```
+
+Als nächstes schauen Sie sich die Körpergrössen an. Zunächst insgesamt:
+
+```{r}
+gf_boxplot(size ~ 1, data=stichprobe)
+```
+
+dann aufgeteilt nach Geschlecht:
+
+```{r}
+gf_boxplot(size ~ sex, data=stichprobe)
+```
+
+Wir vermuten aus unseren Betrachtungen:
+
+a) Es gibt mehr Frauen als Männer.
+b) Frauen sind im allgemeinen kleiner als Männer.
+
+
+Berachten wir die Vermutungen als Hypothesen:
+
+## Es gibt mehr Frauen als Männer
+
+Das Geschlecht ist ein *nominales* Merkmal. Wir können einen Binomialtest machen:
+
+$H_0$ : Es maximal so viele Männer wie Frauen : [$\#M \leq \#F$]
+
+$H_A$ : Es gibt mehr Männer wie Frauen : [$\#M > \#F$]
+
+```{r}
+binom.test( ~ sex, data=stichprobe, alternative="greater", success="male")
+```
+
+$H_0$ : Es genauso viel Männer wie Frauen : [$\#M = \#F$]
+
+$H_A$ : Es gibt mehr oder weniger Männer wie Frauen : [$\#M \neq \#F$]
+
+```{r}
+binom.test( ~ sex, data=stichprobe, alternative="two.sided", success="male")
+```
+
+$H_0$ : Es maximal so viele Frauen wie Männer : [$\#F \leq \#M$]
+
+$H_A$ : Es gibt mehr Frauen wie Männer : [$\#M > \#F$]
+
+```{r}
+binom.test( ~ sex, data=stichprobe, alternative="greater", success="female")
+```
+
+```{r}
+prop.test( ~ sex, data=stichprobe, alternative="greater", success="female")
+```
+
+```{r}
+prop.test( ~ sex, data=stichprobe, alternative="greater", success="female", conf.level=.90)
+```
+
+
+## Männer sind größer als Frauen
+
+```{r}
+gf_histogram( ~size, data=stichprobe)
+inspect(stichprobe, select="size")
+```
+
+```{r}
+gf_histogram( ~size | sex, data=stichprobe)
+favstats( ~size | sex, data=stichprobe)
+```
+
+Wir machen einen *t-test*:
+
+$H_0$ : Männer sind maximal so größer wie Frauen [$size_{M} \leq size_{F}$]
+
+$H_1$ : Männer sind größer als Frauen [$size_{M} > size_{F}$]
+
+
+```{r}
+levels(stichprobe$sex)
+t.test( size ~ sex, alternative="greater", var.equal=TRUE, data=stichprobe)
+```
+
+## Levene Test auf Homoskedastizität
+
+$H_0$ : Die Varianz der Größe unterscheidet sich bei Männern und Frauen nicht. (Homoskedastizität)
+
+$H_A$ : Die Varianz der Größe ist bei Männern und Frauen unterschiedlich. (Heteroskedastizität)
+
+```{r}
+library(car)
+leveneTest(size ~ sex, data=stichprobe)
+bartlett.test(size ~ sex, data=stichprobe)
+```
+
+Ist der P-Wert kleiner Alpha, so kann $H_0$ abgelehnt werden!
+
+Dann müssen wir den Welch-Test machen, statt eines normalen t-Tests!
+

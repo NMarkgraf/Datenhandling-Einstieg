@@ -8,48 +8,67 @@ fontsize: 10pt
 documentclass: article
 classoption: onside
 ---
+```{r setup, echo=FALSE, warning=FALSE, include=FALSE}
+library(knitr)
+
+opts_chunk$set(
+  echo = TRUE,
+  background='#E0E0E0',
+  cache = TRUE,
+  tidy = TRUE,
+  fig.align = "center",
+  #    fig.asp = .618,
+  message = FALSE,
+  warning = FALSE,
+  width.cutoff=78
+)
+
+library(tidyverse)
+library(mosaic)
+
+```
 
 # Einleitung 
 
-## Das Programm R
+## Das Programm **R**
 
-__Warum R?__
+__Warum **R**?__
 
-* R ist ein Programm für Statistik und Datenanalyse.
-* R ist für Linux, MacOS X und Windows (95 oder höher) Plattformen verfügbar.
-* R ist eine elegante und umfassende statistische und grafische Programmiersprache. 
-* R kann eine steile Lernkurve L haben `(L = Zeiteinheit/Erfolgseinheit)`. 
-* R ist kostenlos! Wenn Sie Lehrender oder Studierender sind, sind die Vorteile offensichtlich.
-* R bietet eine unvergleichliche Plattform für die Programmierung neuer statistischer Methoden in einer einfachen und unkomplizierten Weise.
-* R enthält fortgeschrittene statistische Routinen, die noch nicht in anderen Software-Paketen verfügbar sind.
-* R verfügt über state-of-the-art Grafiken Fähigkeiten.
+* **R** ist ein Programm für Statistik und Datenanalyse.
+* **R** ist für *Linux*, *MacOS X* und *Windows* (95 oder höher) Plattformen verfügbar.
+* **R** ist eine elegante und umfassende statistische und grafische Programmiersprache. 
+* **R** kann eine steile Lernkurve L haben `(L: Erfolgseinheit ~ Zeiteinheit)`. 
+* **R** ist kostenlos! Wenn Sie Lehrender oder Studierender sind, aber auch für Unternehmen (!), sind die Vorteile offensichtlich. 
+* **R** bietet eine unvergleichliche Plattform für die Programmierung neuer statistischer Methoden in einer einfachen und unkomplizierten Weise.
+* **R** enthält fortgeschrittene statistische Routinen, die noch nicht in anderen Software-Paketen verfügbar sind.
+* **R** verfügt über state-of-the-art Grafiken Fähigkeiten.
 
 
-__Warum RStudio?__
+__Warum **RStudio**?__
 
-RStudio ist eine integrierte Entwicklungsumgebung (IDE), die die Verwendung von R für Anänfäger und Experten erleichtert.
+**RStudio** ist eine integrierte Entwicklungsumgebung (*IDE*), die die Verwendung von **R** für Anänfäger und Experten erleichtert.
 
 __Warum KEIN RCommander?__
 
-Der RCommander ist eine grafische Benutzeroberfläche, allgemein bekannt als *Rcmdr*, und kann als Paket in **R** und **RStudio** geladen werden. -- Warum sollte man aber?
+Der *RCommander* ist eine grafische Benutzeroberfläche, allgemein bekannt als *Rcmdr*, und kann als Paket in **R** und **RStudio** geladen werden. -- Aber, warum sollte man das tun?
 
 __Wo bekomme ich **R** und **R Studio**?__
 
-* Die Software R kann von einer der [CRAN-Spiegelservern](https://cran.r-project.org/mirrors.html) unter <https://cran.r-project.org/mirrors.html> heruntergeladen werden.
-* RStudio bekommen Sie auf der Homepage von [RStudio](https://www.rstudio.com) unter <https://www.rstudio.com>.
+* Die Software **R** kann von einer der [CRAN-Spiegelservern](https://cran.r-project.org/mirrors.html) unter <https://cran.r-project.org/mirrors.html> heruntergeladen werden.
+* **RStudio** bekommen Sie auf der Homepage von [RStudio](https://www.rstudio.com) unter <https://www.rstudio.com>.
 
 
 __Arbeiten mit **R** und **R Studio**__
 
-* Mit RStudio benutzen Sie entweder die Console oder ein Skiptfenster zur Eingabe der Skriptbefehle. Ein neues R-Skriptfenster öffen Sie über **File-->New File-->R Script**. 
+* Mit **RStudio** benutzen Sie entweder die Console oder ein Skiptfenster zur Eingabe der Skriptbefehle. Ein neues R-Skriptfenster öffen Sie über **File-->New File-->R Script**. 
 
-* Wenn Sie ein RStudio-Skipt benutzen, dann gibt es vier Fenster: 
+* Wenn Sie ein **RStudio**-Skipt benutzen, dann gibt es vier Fenster: 
     + links oben die das Skript, 
     + links unten die Console, 
     + rechts oben Daten, Objekte und Historie und 
     + links unten Dateien, Abbildung, Hilfeseiten und Tipps
 
-* Einzelne Befehle aus dem Skriptfenster in R Studio können Sie annstatt mit dem **Run Button** auch mit **Strg** und **Enter** an die Console schicken.
+* Einzelne Befehle aus dem Skriptfenster in **RStudio** können Sie annstatt mit dem **Run Button** auch mit **Strg** und **Enter** an die Console schicken.
 
 * Befehlen können auch direkt in der Console ausgeführt werden (Ausführung mi der **Enter**-Taste). 
 
@@ -58,18 +77,24 @@ __Arbeiten mit **R** und **R Studio**__
 __Funktionalitäten in R__
 
 * Zusätzliche Funktionalitäten können über Zusatzpakete hinzugeladen werden. Diese müssen ggf. zunächst installiert werden.
-* Paketen könne über den Menüpunkt **Tools** installiert werden oder durch den Befehl **install.packages("Names des Pakets")**.
-* Pakete werden geladen mit dem Befehl **library(Name des Pakets)**.
-* Achten Sie auch die **Anführungszeichen** nur beim Installieren.
-* Mit der Pfeiltaste nach oben können Sie (nur in der Console) einen vorherigen Befehl wieder aufrufen.
-* Im R-Skrip können Sie sich die Befehle und Erläuterungen individuell einrichten und diese unabhängig von der Reihenfolge immer wieder ausführen. 
+* Paketen könne über den Menüpunkt **Tools** installiert werden oder durch den Befehl:
+```{r eval=FALSE}
+install.packages("Names des Pakets")
+```
+* Pakete werden geladen mit dem Befehl `library(<Name des Pakets>)`.
+* Achten Sie darauf: die **Anführungszeichen** nur beim Installieren!
+* Mit der Pfeiltaste nach oben können Sie (nur in der *Console*) einen vorherigen Befehl wieder aufrufen.
+* Im **R**-*Skript* können Sie sich die Befehle und Erläuterungen individuell einrichten und diese unabhängig von der Reihenfolge immer wieder ausführen. 
+* **Rmarkdown** -- Zum Erzeugen von Skripten, Präsentationen, blogs, ...
 
 
 __Umgang mit Daten in R__
 
-Das Bearbeiten und Ändern von Daten funktioniert mit R deutlich anders als z.B. unter *SPSS* -- schon weil es keine graphische Oberfläche zum Bearbeiten der Daten gibt. Das ist aber **kein** Nachteil, sondern ein Vorteil. 
+Das Bearbeiten und Ändern von Daten funktioniert mit **R** deutlich anders als z.B. unter *SPSS* -- schon weil es keine graphische Oberfläche zum Bearbeiten der Daten gibt. Das ist aber **kein** Nachteil, sondern ein Vorteil. 
 
 Der typische *SPSS* Datensatz mit Variablen in den Spalten und Fällen (Versuchspersonen) in den Zeilen heißt bei **R** **Datenrahmen** (engl. **data frame**) und ist ein Objekt im Arbeitsspeicher (engl. *Workspace*). Ein Objekt kann entweder durch das Einlesen einer Datendatei oder durch Zuweisung von Daten erzeugt werden. Zum Einsatz kommt dabei der Zuweisungsbefehl `<-`. 
+
+\pagebreak[1]
 
 ## Datenmanagement in R
 
@@ -91,56 +116,113 @@ Bewertung<-c(8,10,5,6,2) # nummeriche Daten
 Geschlecht<-c("m","w","m",NA,"w") #kategoriale Daten
 
 # Datenrahmen erzeugen
-data<-data.frame(Bewertung,Geschlecht)
+df<-data.frame(Bewertung,Geschlecht)
 
-# Gesamten Datenrahmen ausgeben
-data
+# Den gesamten Datenrahmen ausgeben
+df
 
 # Nur eine Spalte ausgeben
-data[,2] # Spaltennummer reicht aus
+df[,2] # Spaltennummer reicht aus
 
 # Eine bestimmte Zeile ausgeben
-data[3,]
+df[3,]
 
 # Inhalte einer Variablen fortlaufend ausgeben
-data$Geschlecht
+df$Geschlecht
 
-# Variablen ändern (z. B. recodieren der 10er Skala)
-data$Bewertung <- 11-data$Bewertung # (n+1)-X recodiert eine beliebige Skala
-data[1]
-data$Bewertung
+# Variablen ändern 
+# (z.B.: recodieren der 10er Skala durch "X = (n+1)-X")
+df$Bewertung <- 11-df$Bewertung 
+df[1]
+df$Bewertung
 
 ```
 
-## Nützliche Funktionen in R
+## Kleines Datenjudo mit `dplyr` und den *Pipes*
+
+```{r}
+library(dplyr)
+
+Gewicht <- c(50, 66, 75, 80, 40)
+df <- bind_cols(df, data.frame(Gewicht))
+df
+```
+
+```{r}
+df %>% select(c("Geschlecht", "Gewicht")) -> df2
+df2
+
+# Es geht aber auch
+select(df, c("Geschlecht", "Gewicht"))
+```
+
+\pagebreak[1]
+
+```{r tidy=FALSE}
+# Nur das Gewicht von Männern anzeigen
+df2 %>% filter(Geschlecht == "m") %>% select("Gewicht")
+```
+
+\pagebreak[1]
+
+```{r tidy=FALSE}
+# Umständlich das mittlere Gewicht der Männer berechnen
+df2 %>% 
+    filter(Geschlecht == "m") %>% 
+    select("Gewicht") %>%
+    summarise(mean=mean("Gewicht"))
+```
+
+\pagebreak[1]
+
+```{r tidy=FALSE}
+# Umrechnen in eng. Pfund und dabei Runden
+df2 %>%
+    mutate(Gewicht_lbs = round(Gewicht*0.453592^-1, 2))
+```
+
+\pagebreak[1]
+
+```{r tidy=FALSE}
+library(tibble) # -> tidyverse!
+glimpse(df)
+```
+
+\pagebreak[1]
+
+## Nützliche Funktionen in **R**
 
 ```{r Datenjudo_erste_schritte}
-length(data) # Anzahl der Elemente oder Komponenten
-str(data) # Struktur der Daten
-class(data) # Klasse oder Typ der Daten
-names(data) # Variablennamen
+length(df) # Anzahl der Elemente oder Komponenten
+str(df) # Struktur der Daten
+class(df) # Klasse oder Typ der Daten
+names(df) # Variablennamen
 
-c(1:30) # kombinieren Daten in einen Vektor
+c(1,3,4:30) # kombinieren Daten in einen Vektor
 cbind(Bewertung, Geschlecht) # kombiniere die Daten als Spalten
 rbind(Bewertung, Geschlecht) # kombiniere Daten als Zeilen
 
 ls()     # Gibt alle aktiven Objekte aus
-rm(data) # Löscht Objekte
-data<-data.frame(Bewertung,Geschlecht) # und erzeugt sie wieder
-
+rm(df) # Löscht Objekte
+ls()
+df<-data.frame(Bewertung, Geschlecht) # und erzeugt sie wieder
+ls()
 ```
 
 ```{r Daten_aendern, eval=FALSE, include=TRUE}
-newdata <- edit(data)   # Editiert ein Objekt und speicht unter neuem Namen
-fix(data)               # edit in place
+newdata <- edit(df)   # Editiert ein Objekt und speicht unter neuem Namen
+fix(df)               # edit in place
 
 ```
+
+\pagebreak[1]
 
 # Arbeiten mit einem neuen Datensatz
 
 ## Daten einlesen
 
 Es ist praktisch, wenn die eingelesenen Daten im gleichen Verzeichnis liegen wie das Skript. Normalerweise arbeitet man nicht nur einmal mit einem Datensatz, sondern immer wieder und lange Zeit und auf unterschiedlichen Computern. Das Skript beinhaltet dabei alle Informationen: 
+
 * Welcher Datensatz wird eingelesen.
 * Was wird an den Daten verändert.
 * Welche Verfahren werden mir dem eingelesenen Datensatz duchgeführt.
@@ -150,14 +232,17 @@ Es ist praktisch, wenn die eingelesenen Daten im gleichen Verzeichnis liegen wie
 Wir verwenden für die Übungen den `tips` Datensatz. Dazu laden wir die Daten auf unseren Rechner und importieren die Daten. 
 
 ```{r Daten_download}
-# Download der Daten mit dem Befehl
+# Download der Daten mit dem Befehl und lokal speichern
 download.file("https://goo.gl/whKjnl", destfile = "tips.csv")
 tips<-read.csv2("tips.csv")
-
+```
+```{r Daten_download_internet, eval=FALSE, include=TRUE}
+# Direkt (und immer!) aus dem Internet laden:
+tips<-read.csv2("https://goo.gl/whKjnl")
 ```
 
 Wenn die Daten nicht im gleichen Pfad wie das Arbeitsverzeichnis liegen, dann muss das Arbeitsverzeichnis gesucht werden.
-Workspace suchen mit getwd().
+Workspace suchen mit `getwd()`.
 
 ```{r Bsp-getwd, eval=FALSE, include=TRUE}
 getwd()
@@ -169,28 +254,29 @@ Wenn die Daten aus einem anderen Pfad als dem Worspace geladen werden sollen, mu
 setwd("C:/.../...")
 ```
 
-
+\pagebreak[1]
 
 ## Datenstruktur prüfen
 
 Es empfiehlt sich, vor jeder Analyse den Datensatz zu betrachten. Von besonderer Relevanz ist hier die Datenstruktur, d.h. Variablennamen und Variablentypen, die Größe des Datensatzes sowie die ersten und letzten paar Zeilen.
 
-
 ```{r Datenstruktur_pruefen}
 # Datenstruktur betrachten
-str(tips)
+str(tips) # Ggf. glimpse(tips)!
 
 # Dimensionen des Datensatzes
 dim(tips)
 
 # Kopf oder Ende (tail) der Datenmatix betrachten
-head(tips)
+head(tips, 4) # Nur die ersten 4 Zeilen!
 tail(tips)
 
 # Ausgabe der levels bei kategorialen Variablen
 levels(tips$sex)
 
 ```
+
+\pagebreak[1]
 
 ## Datenstruktur verändern
 
@@ -224,11 +310,15 @@ levels(tips$sex)
 
 ```
 
+\pagebreak[1]
+
 # Arbeiten mit dem Paket `mosaic`
 
 Die folgende Syntax 
 
-> Zielbefehl(y ~ x | z, data=...)
+```{r eval=FALSE}
+Zielbefehl(y ~ x | z, data=...)
+```
 
 wird verwendet für 
 
@@ -244,17 +334,21 @@ Für Grafiken gilt:
 * z: Bedingungsvariable
     
 
-Generell gilt:
+Es gilt generell:
 
-> $y ~ x | z$ analog zu $y = f(x)|_z$
+$$y \sim x\, \big|\, z \qquad\text{ analog zu }\qquad y = f(x) \,\bigg|_z$$
 
-kann in der Regel gelesen werden **y wird modelliert von (oder hängt ab von) x unterschieden für jedes z**.
+und kann in der Regel gelesen werden als
 
-Laden der `mosaic` Paktes
+> **y wird modelliert von (oder hängt ab von) x unterschieden für jedes (oder bedingt durch) z**.
+
+Laden des `mosaic` Paketes
 
 ```{r Paket_mosaic_laden}
 library(mosaic)
 ```
+
+\pagebreak[1]
 
 # Grafische Verfahren
 
@@ -264,6 +358,7 @@ library(mosaic)
 ```{r child="ggformula/diagramme.Rmd"}
 ```
 
+\pagebreak[1]
 
 ## Tabellen
 
@@ -284,16 +379,18 @@ mosaicplot(tally(sex~smoker, data=tips))
 
 ```
 
+\pagebreak[1]
 
 # Kennzahlen
 
-```{r Kennzahlen}
+```{r Kennzahlen-1}
 
 # Mittelwert
 mean(tip~sex, data=tips)
+```
 
-
-#Anstatt mean können alle Lageparameter oder Streumaße erechnet werden 
+```{r Kennzahlen-2}
+# Anstatt mean können alle Lageparameter oder Streumaße erechnet werden 
 median(tip~sex, data=tips)
 sd(tip~sex, data=tips)
 var(tip~sex, data=tips)
@@ -301,11 +398,27 @@ IQR(tip~sex, data=tips)
 diffmean(tip~sex, data=tips)
 min(tip~sex, data=tips)
 max(tip~sex, data=tips)
+```
 
-#Favorisierte Statistiken werden ausgegeben mit
+\pagebreak[2]
+
+```{r Kennzahlen-3}
+# Favorisierte Statistiken werden ausgegeben mit
 favstats(tip~sex, data=tips)
+```
 
-#Korrelation als Zusammenhangsmaß mit metrischen Variablen
+\pagebreak[2]
+
+```{r Kennzahlen-4}
+
+# Schneller Überblick über den Datenrahmen 'tips':
+inspect(tips)
+```
+
+\pagebreak[2]
+
+```{r Kennzahlen-5}
+# Korrelation als Zusammenhangsmaß mit metrischen Variablen
 cor(tip~total_bill, data=tips)
 
 cor(tips[,c("total_bill", "tip", "size")])
@@ -314,13 +427,21 @@ cor(tips[,c("total_bill", "tip", "size")])
 
 
 ***
-**Tip**
+**Tipp:**
 
 > Wenn über mehrere Variablen eine Dimension (durch z. B. mean) gebildet werden soll, dann eignet sich für die Aggregation der Daten der apply Befehl.(Achtung: hier mit tips nicht möglich!)                                   
                                                                            
-> Datensatz$Neue_Variable <- apply(Datensatz[,c("Variable1","Variable2", "etc..")],1,mean,na.rm=TRUE)  
-
+```{r tidy=FALSE, eval=FALSE} 
+Datensatz$Neue_Variable <- apply(
+        Datensatz[,c("Variable1","Variable2", "etc..")], 
+        1,  # 1: Zeile , 2: Spalte, c(1,2): Zeile und Spalte
+        mean,  # Mittelwerte
+        na.rm=TRUE  # NA ignorieren
+    )  
+```
 ***
+
+\pagebreak[1]
 
 # Korrleationsplot
 
@@ -348,17 +469,12 @@ library(corrgram)
 corrgram(tips)
 ```
 
+\pagebreak[1]
 
-\newpage
-# Literaturempfehlung für den Einstieg in R mit dem Paket mosaic
+# Literaturempfehlung für den Einstieg in **R** mit dem Paket mosaic
 
 - Daniel T. Kaplan, Nicholas J. Horton, Randall Pruim,  (2013): Project MOSAIC Little Books *Start Teaching with R*,  [http://mosaic-web.org/go/Master-Starting.pdf](http://mosaic-web.org/go/Master-Starting.pdf)
 
 
-
-# Versionshinweise:
-* Autor des Orginal-Skripts: Prof. Dr. Oliver Gansser
-    - Danke für die Überlassung!
-* Datum erstellt: `r Sys.Date()`
-* R Version: `r getRversion()`
-* `mosaic` Version: `r packageVersion("mosaic")`
+```{r child="Epilog.Rmd"}
+```

@@ -1,0 +1,12 @@
+# Versionshinweise:
+
+* Autor des Orginal-Skripts: Prof. Dr. Oliver Gansser
+    - Danke für die Überlassung des Skripts
+* Datum erstellt: `r Sys.Date()`
+* R Version: `r getRversion()`
+* Benutze Pakete und deren Version:
+    - `mosaic` Version: `r packageVersion("mosaic")`
+    - `corrplot` Version: `r packageVersion("corrplot")`
+    - `corgram` Version: `r packageVersion("corrgram")`
+    - `dplyr` Version: `r packageVersion("dplyr")`
+    - `tibble` Version: `r packageVersion("tibble")`
